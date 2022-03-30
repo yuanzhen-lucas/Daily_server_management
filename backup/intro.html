@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>数据备份与还原</title>
+  <meta name="description" content="这本小册子介绍如和通过基本的命令来设置系统备份和还原" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="数据备份与还原" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="这本小册子介绍如和通过基本的命令来设置系统备份和还原" />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="数据备份与还原" />
+  
+  <meta name="twitter:description" content="这本小册子介绍如和通过基本的命令来设置系统备份和还原" />
+  
+
+<meta name="author" content="袁振" />
+
+
+<meta name="date" content="2022-03-30" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+
+<link rel="next" href="备份原则概要.html"/>
+<script src="libs/header-attrs-2.12/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Data Backup</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> 数据备份概要<span></span></a>
+<ul>
+<li class="chapter" data-level="1.0.1" data-path="intro.html"><a href="intro.html#可以阅读看看的参看文献"><i class="fa fa-check"></i><b>1.0.1</b> 可以阅读看看的参看文献<span></span></a></li>
+<li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#备份要点"><i class="fa fa-check"></i><b>1.1</b> 备份要点<span></span></a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="intro.html"><a href="intro.html#备份数据的考虑"><i class="fa fa-check"></i><b>1.1.1</b> 备份数据的考虑<span></span></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="备份原则概要.html"><a href="备份原则概要.html"><i class="fa fa-check"></i><b>2</b> 备份原则概要<span></span></a>
+<ul>
+<li class="chapter" data-level="2.0.1" data-path="备份原则概要.html"><a href="备份原则概要.html#哪些数据值得备份"><i class="fa fa-check"></i><b>2.0.1</b> 哪些数据值得备份<span></span></a></li>
+<li class="chapter" data-level="2.0.2" data-path="备份原则概要.html"><a href="备份原则概要.html#备份用储存媒介的选择"><i class="fa fa-check"></i><b>2.0.2</b> 备份用储存媒介的选择<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="还原.html"><a href="还原.html"><i class="fa fa-check"></i><b>3</b> 还原<span></span></a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="还原.html"><a href="还原.html#备份的种类频率与工具的选择"><i class="fa fa-check"></i><b>3.1</b> 备份的种类、频率与工具的选择<span></span></a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="还原.html"><a href="还原.html#累积备份"><i class="fa fa-check"></i><b>3.1.1</b> 累积备份<span></span></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="备份实战.html"><a href="备份实战.html"><i class="fa fa-check"></i><b>4</b> 备份实战<span></span></a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="备份实战.html"><a href="备份实战.html#备份脚本文件"><i class="fa fa-check"></i><b>4.1</b> 备份脚本文件<span></span></a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="备份实战.html"><a href="备份实战.html#远程备份"><i class="fa fa-check"></i><b>4.1.1</b> 远程备份<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="备份实战.html"><a href="备份实战.html#timeshift备份与还原"><i class="fa fa-check"></i><b>4.2</b> Timeshift备份与还原<span></span></a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="备份实战.html"><a href="备份实战.html#系统备份"><i class="fa fa-check"></i><b>4.2.1</b> 系统备份<span></span></a></li>
+<li class="chapter" data-level="4.2.2" data-path="备份实战.html"><a href="备份实战.html#系统还原"><i class="fa fa-check"></i><b>4.2.2</b> 系统还原<span></span></a></li>
+<li class="chapter" data-level="4.2.3" data-path="备份实战.html"><a href="备份实战.html#tips"><i class="fa fa-check"></i><b>4.2.3</b> tips<span></span></a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="http://hbmcsysbio.team/" target="blank">Our Sysbio Team Web Page</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">数据备份与还原</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="header">
+<h1 class="title">数据备份与还原</h1>
+<p class="author"><em>袁振</em></p>
+<p class="date"><em>2022-03-30</em></p>
+</div>
+<div id="intro" class="section level1 hasAnchor" number="1">
+<h1><span class="header-section-number">Chapter 1</span> 数据备份概要<a href="intro.html#intro" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>这本小册子介绍如和通过基本的命令来设置系统和备份，同时，如果你的Linux某一天被黑客袭击了或者你错误的修改了系统的配置文件，导致你的系统奔溃了。在这个时候，如果你有备份的数据，那么就美滋滋，你用来恢复系统的时间和成本就会大大降低。不会像我在今天（2021年6月8日）使系统奔溃了，但是手足无措。那么那些文件最需要备份？备份时需要完整的备份还是仅仅备份重要的数据？咱们现在就开始学习一下。</p>
+<hr />
+<div id="可以阅读看看的参看文献" class="section level3 hasAnchor" number="1.0.1">
+<h3><span class="header-section-number">1.0.1</span> 可以阅读看看的参看文献<a href="intro.html#可以阅读看看的参看文献" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><a href="https://www.tutorialspoint.com/linux_admin/linux_admin_backup_and_recovery.htm">tutorialspoint</a></li>
+<li><a href="https://www.ubuntupit.com/best-backup-software-for-linux/">The 15 Best Backup Software For Linux Desktop</a></li>
+<li><a href="https://wiki.archlinux.org/title/Btrfs">Btrfs</a></li>
+<li><a href="http://linux.vbird.org/linux_basic/0610hardware.php">鸟哥的Linux私房菜(繁体字)</a></li>
+</ul>
+</div>
+<div id="备份要点" class="section level2 hasAnchor" number="1.1">
+<h2><span class="header-section-number">1.1</span> 备份要点<a href="intro.html#备份要点" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="备份数据的考虑" class="section level3 hasAnchor" number="1.1.1">
+<h3><span class="header-section-number">1.1.1</span> 备份数据的考虑<a href="intro.html#备份数据的考虑" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>如果你需要重新安装系统的时候，备份的好坏会影响到你恢复系统的进度。那么首先，咱们得了解系统为啥回损坏。说来惭愧，我上次就是应为错误删除系统配置文件，而导致系统崩溃。说的学术点，系统可能因为<strong>不可预期的伤害而导致系统发生错误</strong>，这就包括：硬盘坏掉、软件问题导致系统出错、人为操作不当或者其它因素。</p>
+<p><strong><em>==Even a very powerful operating system cannot cope with random deletion by system administrators !!==!</em></strong></p>
+<p><strong><em>==Even a very powerful operating system cannot cope with random deletion by system administrators !!==!</em></strong></p>
+<p><strong><em>==Even a very powerful operating system cannot cope with random deletion by system administrators !!!==</em></strong></p>
+<ul>
+<li><p>硬件问题</p>
+<p><strong>计算机是一个不可靠的东西</strong> ，看到一本书这样讲，感觉是有点玄学吧。一般来说，造成系统损坏得硬件组件应该使硬盘了，因为其他组件坏掉时，会影响到系统的运行，不过我们的数据还在硬盘中。</p></li>
+<li><p>软件与人为问题</p>
+<p>==<strong><em>用户操作不当对系统软件会造成最严重伤害</em></strong>== （就是我这样傻乎乎地删除了系统配置文件）。就像解决问题的最好办法就是解决提出问题的人，高手厌烦你的低级代码错误，直接给你一行命令：<code>sudo rm -rf /*</code>，如果你真的这样做，赶紧收拾东西跑路吧。对于世界上某些闲人（黑客）攻击，也会使得你的系统奔溃。</p></li>
+</ul>
+<p>就像咱们价格昂贵的测序数据，各种Seq分析的脚本，万一丢失了岂不是一个巨大的损失。首先了解一下备份呗。</p>
+<ul>
+<li><p>主机角色不同，备份任务也就不同</p>
+<p>那么每一台主机都需要备份？多久备份一次？要备份什么数据？</p>
+<p>类似Ghost这样的单机备份软件就是将你系统上的磁盘数据完整地复制，可以使用USB外接磁盘备份，只要将USB磁盘连接到主机就可以恢复了。</p>
+<p>如果主机提供了Internet在线服务，例如你在一条微博下评论，但是某天那条微博评论区奔溃了，而你那条极其重要地可以改你的内心小世界的评论找不回来咋办，总不能哇的一下哭起来了吧。所以建立备份策略（频率、媒介、方法等）时非常有必要的。</p></li>
+</ul>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+
+<a href="备份原则概要.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/01-intro.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

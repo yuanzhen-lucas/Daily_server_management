@@ -1,0 +1,493 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{book}
+\title{数据备份与还原}
+\author{袁振}
+\date{2022-03-30}
+
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={数据备份与还原},
+  pdfauthor={袁振},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
+\usepackage{booktabs}
+\usepackage{amsthm}
+\makeatletter
+\def\thm@space@setup{%
+  \thm@preskip=8pt plus 2pt minus 4pt
+  \thm@postskip=\thm@preskip
+}
+\makeatother
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage[]{natbib}
+\bibliographystyle{apalike}
+
+\begin{document}
+\maketitle
+
+{
+\setcounter{tocdepth}{1}
+\tableofcontents
+}
+这本小册子介绍如和通过基本的命令来设置系统和备份，同时，如果你的Linux某一天被黑客袭击了或者你错误的修改了系统的配置文件，导致你的系统奔溃了。在这个时候，如果你有备份的数据，那么就美滋滋，你用来恢复系统的时间和成本就会大大降低。不会像我在今天（2021年6月8日）使系统奔溃了，但是手足无措。那么那些文件最需要备份？备份时需要完整的备份还是仅仅备份重要的数据？咱们现在就开始学习一下。
+
+\hypertarget{intro}{%
+\chapter{数据备份概要}\label{intro}}
+
+这本小册子介绍如和通过基本的命令来设置系统和备份，同时，如果你的Linux某一天被黑客袭击了或者你错误的修改了系统的配置文件，导致你的系统奔溃了。在这个时候，如果你有备份的数据，那么就美滋滋，你用来恢复系统的时间和成本就会大大降低。不会像我在今天（2021年6月8日）使系统奔溃了，但是手足无措。那么那些文件最需要备份？备份时需要完整的备份还是仅仅备份重要的数据？咱们现在就开始学习一下。
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\hypertarget{ux53efux4ee5ux9605ux8bfbux770bux770bux7684ux53c2ux770bux6587ux732e}{%
+\subsection{可以阅读看看的参看文献}\label{ux53efux4ee5ux9605ux8bfbux770bux770bux7684ux53c2ux770bux6587ux732e}}
+
+\begin{itemize}
+\tightlist
+\item
+  \href{https://www.tutorialspoint.com/linux_admin/linux_admin_backup_and_recovery.htm}{tutorialspoint}
+\item
+  \href{https://www.ubuntupit.com/best-backup-software-for-linux/}{The 15 Best Backup Software For Linux Desktop}
+\item
+  \href{https://wiki.archlinux.org/title/Btrfs}{Btrfs}
+\item
+  \href{http://linux.vbird.org/linux_basic/0610hardware.php}{鸟哥的Linux私房菜(繁体字)}
+\end{itemize}
+
+\hypertarget{ux5907ux4efdux8981ux70b9}{%
+\section{备份要点}\label{ux5907ux4efdux8981ux70b9}}
+
+\hypertarget{ux5907ux4efdux6570ux636eux7684ux8003ux8651}{%
+\subsection{备份数据的考虑}\label{ux5907ux4efdux6570ux636eux7684ux8003ux8651}}
+
+如果你需要重新安装系统的时候，备份的好坏会影响到你恢复系统的进度。那么首先，咱们得了解系统为啥回损坏。说来惭愧，我上次就是应为错误删除系统配置文件，而导致系统崩溃。说的学术点，系统可能因为\textbf{不可预期的伤害而导致系统发生错误}，这就包括：硬盘坏掉、软件问题导致系统出错、人为操作不当或者其它因素。
+
+\textbf{\emph{==Even a very powerful operating system cannot cope with random deletion by system administrators !!==!}}
+
+\textbf{\emph{==Even a very powerful operating system cannot cope with random deletion by system administrators !!==!}}
+
+\textbf{\emph{==Even a very powerful operating system cannot cope with random deletion by system administrators !!!==}}
+
+\begin{itemize}
+\item
+  硬件问题
+
+  \textbf{计算机是一个不可靠的东西} ，看到一本书这样讲，感觉是有点玄学吧。一般来说，造成系统损坏得硬件组件应该使硬盘了，因为其他组件坏掉时，会影响到系统的运行，不过我们的数据还在硬盘中。
+\item
+  软件与人为问题
+
+  ==\textbf{\emph{用户操作不当对系统软件会造成最严重伤害}}== （就是我这样傻乎乎地删除了系统配置文件）。就像解决问题的最好办法就是解决提出问题的人，高手厌烦你的低级代码错误，直接给你一行命令：\texttt{sudo\ rm\ -rf\ /*}，如果你真的这样做，赶紧收拾东西跑路吧。对于世界上某些闲人（黑客）攻击，也会使得你的系统奔溃。
+\end{itemize}
+
+就像咱们价格昂贵的测序数据，各种Seq分析的脚本，万一丢失了岂不是一个巨大的损失。首先了解一下备份呗。
+
+\begin{itemize}
+\item
+  主机角色不同，备份任务也就不同
+
+  那么每一台主机都需要备份？多久备份一次？要备份什么数据？
+
+  类似Ghost这样的单机备份软件就是将你系统上的磁盘数据完整地复制，可以使用USB外接磁盘备份，只要将USB磁盘连接到主机就可以恢复了。
+
+  如果主机提供了Internet在线服务，例如你在一条微博下评论，但是某天那条微博评论区奔溃了，而你那条极其重要地可以改你的内心小世界的评论找不回来咋办，总不能哇的一下哭起来了吧。所以建立备份策略（频率、媒介、方法等）时非常有必要的。
+\end{itemize}
+
+\hypertarget{ux5907ux4efdux539fux5219ux6982ux8981}{%
+\chapter{备份原则概要}\label{ux5907ux4efdux539fux5219ux6982ux8981}}
+
+\hypertarget{ux54eaux4e9bux6570ux636eux503cux5f97ux5907ux4efd}{%
+\subsection{哪些数据值得备份}\label{ux54eaux4e9bux6570ux636eux503cux5f97ux5907ux4efd}}
+
+那么那些是重要的关键数据备份你？大致可以分为两大类：
+
+\begin{itemize}
+\tightlist
+\item
+  系统基本设置信息
+\item
+  类似网络服务的内容数据
+\end{itemize}
+
+\hypertarget{ux64cdux4f5cux7cfbux7edfux672cux8eabux9700ux8981ux5907ux4efdux7684ux6587ux4ef6}{%
+\subsubsection{操作系统本身需要备份的文件}\label{ux64cdux4f5cux7cfbux7edfux672cux8eabux9700ux8981ux5907ux4efdux7684ux6587ux4ef6}}
+
+这方面的文件主要是与【账号与系统配置文件】有关。分为五类\texttt{/etc/passwd}、\texttt{/etc/shadow}、\texttt{/etc/group}、\texttt{/etc/gsshadow}、\texttt{/home}下面的用户家目录等。一般的话，将/etc整个目录备份下来的话准没错，这样几乎所有配置文件都可以被保存。
+
+/home使用户的家目录，而且如果用户会有邮件的话，也需要保存/var/spool/mail/内容也需要备份。如果你修改过内核，那么/boot里面的信息也很重要。
+
+\hypertarget{ux7f51ux7edcux670dux52a1ux7684ux6570ux636eux5e93ux65b9ux9762}{%
+\subsubsection{网络服务的数据库方面}\label{ux7f51ux7edcux670dux52a1ux7684ux6570ux636eux5e93ux65b9ux9762}}
+
+如果你的网络软件都是以原厂提供为主，配置文件都在/etc/下面。如果你是自行安装的话，那么/usr/local这个文件夹就非常重要了。用户主动提供的文件，以及服务运行过程中会产生的数据，都需要被考虑来备份。所以以下的建议来备份：
+
+\begin{itemize}
+\tightlist
+\item
+  软件本身的配置文件：/etc/整个目录以及/usr/local/整个目录
+\item
+  软件服务提供的数据
+
+  \begin{itemize}
+  \tightlist
+  \item
+    WWW数据：/var/www整个目录或者/srv/www整个目录，以及系统用户的家目录
+  \item
+    MariaDB:/var/lib/mysql整个目录
+  \end{itemize}
+\item
+  其他在Linux主机上面提供的服务的数据库文件
+\end{itemize}
+
+总的来说，你需要保存以下软件：\texttt{/etc}、\texttt{/home}、\texttt{/root}、\texttt{/var/spool/mail/}、\texttt{/var/spool/cron/}、\texttt{/var/spool/at/}、\texttt{/var/lib/}这些文件目录建议被保存。而\texttt{/dev}看你啰。
+
+\hypertarget{ux5907ux4efdux7528ux50a8ux5b58ux5a92ux4ecbux7684ux9009ux62e9}{%
+\subsection{备份用储存媒介的选择}\label{ux5907ux4efdux7528ux50a8ux5b58ux5a92ux4ecbux7684ux9009ux62e9}}
+
+选择一个数据存放的地方，也显得非常重要。
+
+\begin{itemize}
+\item
+  异地备份系统
+
+  说的简单一点就是将你的系统数据备份到其他的地方去。我可以把学校的东西备份到我家的电脑里面去的。但是着个操作很受带宽的影响。如果你的带宽足够好的话，可以考虑。但是，咱们中心的WIFI实在是太差了，还经常断线，嗐！！
+\item
+  存储媒介的考虑
+
+  在过去使用的存储媒介可能有Tape、MO、ZIP、CD-RW、DVD-RW、外接式磁盘以及外接NAS储存设备（等价于一台小型的Linux服务器）
+
+  经费充足的情况下，可以使用NAS。经费不足，现在磁盘都有4TB以上的容量，那一块磁盘通过外接式USB接口，搭配USB3.0来传输，也很美滋滋。这样处理方式怕单块磁盘损坏，可以买两三块互相轮流备份，如果想保存较长时间斌且不怕消磁和发霉，磁带也是个不错选择。
+\end{itemize}
+
+\hypertarget{ux8fd8ux539f}{%
+\chapter{还原}\label{ux8fd8ux539f}}
+
+\hypertarget{ux5907ux4efdux7684ux79cdux7c7bux9891ux7387ux4e0eux5de5ux5177ux7684ux9009ux62e9}{%
+\section{备份的种类、频率与工具的选择}\label{ux5907ux4efdux7684ux79cdux7c7bux9891ux7387ux4e0eux5de5ux5177ux7684ux9009ux62e9}}
+
+那么备份的方式有哪些呢？一般可以粗略的分为：累计备份和差异备份。如果你在系统出错时，想要重新安装到更新的系统时，仅备份关键数据就行。
+
+\hypertarget{ux7d2fux79efux5907ux4efd}{%
+\subsection{累积备份}\label{ux7d2fux79efux5907ux4efd}}
+
+如果仅备份关进啊数据，那么你要在系统出错后，再去找新的Linux发行版本来安装，安装完毕后海奥考虑到数据新旧版本差异的问题。还得要进行数据的移植与系统服务的重新建立等。等到建立完成后，还要进行相关的测试。
+
+\begin{itemize}
+\item
+  还原的考虑
+
+  若硬件出问题导致系统损坏，调用（如使用dd命令）备份，甚至连系统都不需要重装
+\item
+  原则
+
+  但是当你系统用的非常久，产生了大量的数据时，累计备份所花费的时间和储存媒介的使用就显得十分麻烦。
+
+  在累计备份当中，指的是：系统在进行完第一次完整备份后，经过一段时间的运行，比较系统与备份文件之间的差异，仅备份有差异的文件就行。而第二次累积备份则与第一次累计备份的数据比较，也是仅备份有差异的数据而已。
+
+  举个栗子：星期一我做好了完整备份，周二累计备份就是在周一的完整备份的基础上备份差异的数据。周三备份与周二差异的数据，依次累积（我在周一有1.txt、2.txt，我在周二生成了3.txt，那么会把3.txt累积到周一备份里面，这样备份就有1.txt、2.txt、3.txt这三个文件了）
+\item
+  还原
+
+  如果你周四的时候，系统奔溃了，那么你的首先万元周一完整的备份，然后完成周二、周三的累积备份，这样才能完全恢复
+\item
+  常用还原软件
+
+  有dd、cpio、xfsdump/xfsrestore等，这些工具都能备份设备与特殊的文件。
+
+  \begin{itemize}
+  \tightlist
+  \item
+    dd可以直接读取磁盘的扇区（sector）而不理会文件系统，速度很慢
+  \item
+    cpio能够备份所有文件名，得配合find或其他找文件的命令才可。
+  \item
+    上面两个得完整备份需要使用脚本，而xfsdump可直接进行
+  \end{itemize}
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#\#用dd将/dev/sda备份到/yuanzhen,不必格式化，但是很慢}
+\FunctionTok{dd}\NormalTok{ if=/dev/sda of=/yuanzhen}
+\CommentTok{\#\#使用cpio来备份与还原系统，假设储存媒介为SATA磁带机}
+\FunctionTok{find}\NormalTok{ / }\AttributeTok{{-}print} \KeywordTok{|} \FunctionTok{cpio} \AttributeTok{{-}covB} \OperatorTok{\textgreater{}}\NormalTok{ /dev/st0 }\CommentTok{\#\#\#\#备份}
+\FunctionTok{cpio} \AttributeTok{{-}iduv} \OperatorTok{\textless{}}\NormalTok{ /dev/st0 }\CommentTok{\#\#\#\#还原}
+\CommentTok{\#\#将/home独立文件系统备份到/yuanzhen独立用来备份得文件系统}
+\ExtensionTok{xfsdump} \AttributeTok{{-}l}\NormalTok{ 0 }\AttributeTok{{-}L} \StringTok{\textquotesingle{}full\textquotesingle{}} \AttributeTok{{-}M} \StringTok{\textquotesingle{}full\textquotesingle{}} \AttributeTok{{-}f}\NormalTok{ /yuanzhen/home.dump /home  }\CommentTok{\#\#\#完整备份}
+\ExtensionTok{xfsdump} \AttributeTok{{-}l}\NormalTok{ 1 }\AttributeTok{{-}L} \StringTok{\textquotesingle{}full{-}1\textquotesingle{}} \AttributeTok{{-}M} \StringTok{\textquotesingle{}full{-}1\textquotesingle{}} \AttributeTok{{-}f}\NormalTok{ /yuanzhen/home.dump1 /home }\CommentTok{\#\#\#第一次累计备份}
+
+\CommentTok{\#\#tar也可以考虑备份正系统，除了不需要得/proc、/mnt、/tmp目录}
+\FunctionTok{tar} \AttributeTok{{-}{-}exclude}\NormalTok{ /proc }\AttributeTok{{-}{-}exclude}\NormalTok{ /mnt }\AttributeTok{{-}{-}exclude}\NormalTok{ /tmp }\DataTypeTok{\textbackslash{}}
+\OperatorTok{\textgreater{}}\NormalTok{ {-}{-}exclude /yuanzhen }\AttributeTok{{-}jcvp} \AttributeTok{{-}f}\NormalTok{ /yuanzhen/system.tar.bz2 /}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{ux5907ux4efdux5b9eux6218}{%
+\chapter{备份实战}\label{ux5907ux4efdux5b9eux6218}}
+
+\hypertarget{ux5907ux4efdux811aux672cux6587ux4ef6}{%
+\section{备份脚本文件}\label{ux5907ux4efdux811aux672cux6587ux4ef6}}
+
+首先来了解备份策略
+
+\begin{itemize}
+\tightlist
+\item
+  主机硬件：使用一个独立得文件系统来储存备份数据，将此文件系统挂载到/yuanzhen当中
+\item
+  每日进行：备份经常变动性数据
+\item
+  每周进行：包括/home、/var、/etc、/boot、/usr/local等目录与特殊服务目录
+\item
+  自动处理：利用/etc/crontab来自动进行备份
+\item
+  异地备份：每月定期将数据：1）刻在光盘上，2）使用网络传输到另一台机器上
+\end{itemize}
+
+\hypertarget{ux8fdcux7a0bux5907ux4efd}{%
+\subsection{远程备份}\label{ux8fdcux7a0bux5907ux4efd}}
+
+我选择了使用朱方捷老师在大数据中心服务器作为我的远程备份位点
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#\#登录朱老师在大数据中的远程terminal}
+\FunctionTok{ssh}\NormalTok{ zhufj@210.34.84.97}
+\CommentTok{\#\#创建你需要挂载的文件夹}
+\FunctionTok{mkdir}\NormalTok{ data\_backup}
+\CommentTok{\#\#退出登录}
+\BuiltInTok{exit}
+\CommentTok{\#\# 登陆到你的本地服务器}
+\FunctionTok{ssh}\NormalTok{ yuanzhen@59.79.233.205}
+\CommentTok{\#\#在/wrk下创建你需要对接的文件夹}
+\FunctionTok{sudo}\NormalTok{ mkdir /wrk/data\_backup}
+\CommentTok{\#\#现在我们可以使用sshfs命令在本地挂载文件系统。如果您的VPS是使用密码登录创建的，则以下命令将执行此操作。在此步骤中，系统将要求您提供虚拟服务器的root密码。}
+\FunctionTok{sudo}\NormalTok{ sshfs }\AttributeTok{{-}o}\NormalTok{ allow\_other zhufj@210.34.84.97:/share/home/zhufj/data\_backup /wrk/data\_backup}
+\CommentTok{\#\#\#当您不再需要安装点时，您只需使用该命令卸载它即可}
+\FunctionTok{sudo}\NormalTok{ umount /mnt/droplet}
+
+
+
+\CommentTok{\#\#\#\#永久挂载远程文件系统}
+\CommentTok{\#\#\#SSHFS还允许为远程文件系统设置永久挂载点。这将设置一个挂载点，就算你重新启动本地计算机和服务器它也持续存在。为了设置永久挂载点，我们需要编辑本地计算机上\textasciigrave{}/etc/fstab\textasciigrave{}文件，以便在每次启动系统时自动挂载文件系统。}
+\CommentTok{\#\#\#首先，我们需要用文本编辑器编辑\textasciigrave{}/etc/fstab\textasciigrave{}文件。}
+\FunctionTok{sudo}\NormalTok{ vim /etc/fstab}
+\CommentTok{\#\#\#添加以下条目}
+\ExtensionTok{sshfs\#zhufj@210.34.84.97:/share/home/zhufj/data\_backup}\NormalTok{ /wrk/data\_backup}
+
+\CommentTok{\#\#应该注意的是，在本地永久安装VPS文件系统存在潜在的安全风险。如果您的本地计算机受到攻击，它可能会直接感染到您的服务器。因此，建议不要在生产服务器上设置永久挂载。}
+
+\CommentTok{\#然后修改/etc/crontab}
+\FunctionTok{sudo}\NormalTok{ vim /etc/crontab}
+\CommentTok{\#\#在里面添加（这样你就会在每周日的23：59准时将你的系统备份并生成日志文件）}
+\ExtensionTok{59}\NormalTok{ 23   }\PreprocessorTok{*} \PreprocessorTok{*}\NormalTok{ sun root    cd /wrk }\KeywordTok{\&\&} \ExtensionTok{/wrk/data\_backup.sh} \AttributeTok{{-}{-}report}\NormalTok{ /wrk/data\_backup.log}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{timeshiftux5907ux4efdux4e0eux8fd8ux539f}{%
+\section{Timeshift备份与还原}\label{timeshiftux5907ux4efdux4e0eux8fd8ux539f}}
+
+\hypertarget{ux7cfbux7edfux5907ux4efd}{%
+\subsection{系统备份}\label{ux7cfbux7edfux5907ux4efd}}
+
+一般linux系统是比较稳定的，但是像我这样马马虎虎，又是一个Linux半吊子新手很容易出错，那么备份就显得十分重要，这里介绍备份的一种方法
+
+此时你需要准备
+
+\begin{itemize}
+\item
+  下载timeshift
+
+  \texttt{sudo\ apt-get\ update}
+
+  \texttt{sudo\ apt-get\ install\ timeshif}
+\item
+  准备一个外接的磁盘（容量在32G以上），那一块磁盘通过外接式USB接口，搭配USB3.0来传输。
+\end{itemize}
+
+此时在你的Ubuntu本地软件库你就会找到Timshift这个软件图标，具体的\href{https://www.linuxtechi.com/timeshift-backup-restore-ubuntu-linux/}{可视化界面操作}
+
+\hypertarget{ux7cfbux7edfux8fd8ux539f}{%
+\subsection{系统还原}\label{ux7cfbux7edfux8fd8ux539f}}
+
+如果你的系统奔溃，但是有三种以下的情况，你可以分别应对
+
+\begin{itemize}
+\item
+  如果能进入登陆界面，并且能够打开Timeshift，你就直接点击还原（restore），重启电脑就可。
+\item
+  如果只能进入登陆界面，一般系统崩溃后不能进入桌面，但是能够进入登录界面，现象就是在登录界面输入密码后不会进入桌面，那么就要通过命令行的方式进行还原。
+
+  \begin{itemize}
+  \item
+    通过·Ctrl+Alt+F1（一般F1-F6都可）进入tty终端
+  \item
+    输入用户和密码登录
+  \item
+    执行下面命令获取系统当前可以还原的节点
+
+    \texttt{sudo\ timeshift\ -\/-list}
+  \item
+    根据输出的内容选择一个节点进行还原(--skip-grub 选项为跳过grub安装，一般来说grub不需要重新安装，除非bios启动无法找到正确的grub启动项，才需要安装)
+
+    \texttt{sudo\ timeshift\ -\/-restore\ -\/-snapshot\ \textquotesingle{}2021-06-10\_15-18-14\textquotesingle{}\ -\/-skip-grub}
+  \item
+    在输出的内容中一次输入【Enter】键和【y】键即可
+
+    你不想输入这些的话直接使用
+
+    \texttt{sudo\ timeshift\ -\/-restore\ -\/-snapshot\ \textquotesingle{}2021-06-10\_15-18-14\textquotesingle{}\ -\/-skip-grub\ -\/-scripted}
+  \end{itemize}
+\item
+  如果无法进入系统，通过U盘启动系统
+
+  当登录界面和桌面环境都无法进入时，一般系统已经彻底崩溃，此时只能通过Linux live CD进行还原。
+
+  \begin{itemize}
+  \tightlist
+  \item
+    制作Linux Mint启动盘
+  \item
+    进入Live系统后打开Timeshift软件，点击设置按钮，设置快照的储存位置
+  \item
+    后续步骤和第一和第二种情况相同按照线条的处理方式
+  \end{itemize}
+\end{itemize}
+
+\hypertarget{tips}{%
+\subsection{tips}\label{tips}}
+
+\hypertarget{ux5236ux4f5clinux-mintux542fux52a8ux76d8ux4ee5ux4e0bux64cdux4f5cux672aux7ecfux8fc7ux5b9eux9645ux64cdux4f5cux614eux884c}{%
+\subsubsection{制作Linux Mint启动盘==（以下操作未经过实际操作，慎行）==}\label{ux5236ux4f5clinux-mintux542fux52a8ux76d8ux4ee5ux4e0bux64cdux4f5cux672aux7ecfux8fc7ux5b9eux9645ux64cdux4f5cux614eux884c}}
+
+\begin{itemize}
+\item
+  下载\href{https://www.linuxmint.com/edition.php?id=246}{iso文件}
+\item
+  下载\href{https://www.ultraiso.com/}{UltraISO} ,傻瓜式安装，不用注册打开之后就进入主界面
+\item
+  选择菜单栏中的【文件】，然后选择打开，这个步骤就是寻找你的镜像文件
+\item
+  选择镜像文件，选择【打开】，我们就可以在主界面看到我们打开的镜像文件
+\item
+  打开之后，选择菜单栏中的【启动】，【写入硬盘映像】
+\item
+  在弹出的对话框中，选择【硬盘驱动器】，就是我们自己的U盘，我们插入u盘，就会自动显示。
+
+  说明：制作U盘启动盘会导致U盘格式化，所以提前备份好U盘里面的东西，然后选择【写入】，就可以看到读条了！
+\item
+  等进度条满格之后，就制作成功了！打开【计算机】，可以看到U盘也变了！
+\end{itemize}
+
+以上来源非官方的\href{https://jingyan.baidu.com/article/4b07be3c497b4648b280f36f.html}{百度百科} 可以详细看看\href{https://ubuntu.com/tutorials/create-a-usb-stick-on-ubuntu\#2-requirements}{官方文档}
+
+\hypertarget{live-usb}{%
+\subsubsection{Live USB}\label{live-usb}}
+
+\textbf{Live USB} 是\href{https://zh.wikipedia.org/wiki/USB}{USB}\href{https://zh.wikipedia.org/wiki/隨身碟}{随身碟}或USB\href{https://zh.wikipedia.org/wiki/硬碟}{硬盘}，里面含有完整的\href{https://zh.wikipedia.org/wiki/作業系統}{操作系统}，可以被用来开机（booting）。Live USB很像\href{https://zh.wikipedia.org/wiki/Live_CD}{live CD}，但基本上有能力更改设定，而且可以把软件安装回USB装置上。像live CD一样，live USB可以使用在\href{https://zh.wikipedia.org/wiki/嵌入式系统}{嵌入式系统}系统管理（embedded systems system administration），资料还原（data recovery），或是不需要把操作系统安装到主机硬盘（local hard disk drive）里的测试。许多操作系统，包含微软的\href{https://zh.wikipedia.org/wiki/Windows_XP_Embedded}{Windows XP Embedded}和许多\href{https://zh.wikipedia.org/wiki/Linux套件}{Linux套件}和\href{https://zh.wikipedia.org/wiki/BSD}{BSD}可以被安装在随身碟上使用。差不多在你U盘上搞一个自己的小Linux系统
+
+  \bibliography{book.bib,packages.bib}
+
+\end{document}

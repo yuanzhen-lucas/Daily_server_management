@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 4 备份实战 | 数据备份与还原</title>
+  <meta name="description" content="这本小册子介绍如和通过基本的命令来设置系统备份和还原" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 4 备份实战 | 数据备份与还原" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="这本小册子介绍如和通过基本的命令来设置系统备份和还原" />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 4 备份实战 | 数据备份与还原" />
+  
+  <meta name="twitter:description" content="这本小册子介绍如和通过基本的命令来设置系统备份和还原" />
+  
+
+<meta name="author" content="袁振" />
+
+
+<meta name="date" content="2022-03-30" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="还原.html"/>
+
+<script src="libs/header-attrs-2.12/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Data Backup</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> 数据备份概要<span></span></a>
+<ul>
+<li class="chapter" data-level="1.0.1" data-path="intro.html"><a href="intro.html#可以阅读看看的参看文献"><i class="fa fa-check"></i><b>1.0.1</b> 可以阅读看看的参看文献<span></span></a></li>
+<li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#备份要点"><i class="fa fa-check"></i><b>1.1</b> 备份要点<span></span></a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="intro.html"><a href="intro.html#备份数据的考虑"><i class="fa fa-check"></i><b>1.1.1</b> 备份数据的考虑<span></span></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="备份原则概要.html"><a href="备份原则概要.html"><i class="fa fa-check"></i><b>2</b> 备份原则概要<span></span></a>
+<ul>
+<li class="chapter" data-level="2.0.1" data-path="备份原则概要.html"><a href="备份原则概要.html#哪些数据值得备份"><i class="fa fa-check"></i><b>2.0.1</b> 哪些数据值得备份<span></span></a></li>
+<li class="chapter" data-level="2.0.2" data-path="备份原则概要.html"><a href="备份原则概要.html#备份用储存媒介的选择"><i class="fa fa-check"></i><b>2.0.2</b> 备份用储存媒介的选择<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="还原.html"><a href="还原.html"><i class="fa fa-check"></i><b>3</b> 还原<span></span></a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="还原.html"><a href="还原.html#备份的种类频率与工具的选择"><i class="fa fa-check"></i><b>3.1</b> 备份的种类、频率与工具的选择<span></span></a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="还原.html"><a href="还原.html#累积备份"><i class="fa fa-check"></i><b>3.1.1</b> 累积备份<span></span></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="备份实战.html"><a href="备份实战.html"><i class="fa fa-check"></i><b>4</b> 备份实战<span></span></a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="备份实战.html"><a href="备份实战.html#备份脚本文件"><i class="fa fa-check"></i><b>4.1</b> 备份脚本文件<span></span></a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="备份实战.html"><a href="备份实战.html#远程备份"><i class="fa fa-check"></i><b>4.1.1</b> 远程备份<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="备份实战.html"><a href="备份实战.html#timeshift备份与还原"><i class="fa fa-check"></i><b>4.2</b> Timeshift备份与还原<span></span></a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="备份实战.html"><a href="备份实战.html#系统备份"><i class="fa fa-check"></i><b>4.2.1</b> 系统备份<span></span></a></li>
+<li class="chapter" data-level="4.2.2" data-path="备份实战.html"><a href="备份实战.html#系统还原"><i class="fa fa-check"></i><b>4.2.2</b> 系统还原<span></span></a></li>
+<li class="chapter" data-level="4.2.3" data-path="备份实战.html"><a href="备份实战.html#tips"><i class="fa fa-check"></i><b>4.2.3</b> tips<span></span></a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="http://hbmcsysbio.team/" target="blank">Our Sysbio Team Web Page</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">数据备份与还原</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="备份实战" class="section level1 hasAnchor" number="4">
+<h1><span class="header-section-number">Chapter 4</span> 备份实战<a href="备份实战.html#备份实战" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="备份脚本文件" class="section level2 hasAnchor" number="4.1">
+<h2><span class="header-section-number">4.1</span> 备份脚本文件<a href="备份实战.html#备份脚本文件" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>首先来了解备份策略</p>
+<ul>
+<li>主机硬件：使用一个独立得文件系统来储存备份数据，将此文件系统挂载到/yuanzhen当中</li>
+<li>每日进行：备份经常变动性数据</li>
+<li>每周进行：包括/home、/var、/etc、/boot、/usr/local等目录与特殊服务目录</li>
+<li>自动处理：利用/etc/crontab来自动进行备份</li>
+<li>异地备份：每月定期将数据：1）刻在光盘上，2）使用网络传输到另一台机器上</li>
+</ul>
+<div id="远程备份" class="section level3 hasAnchor" number="4.1.1">
+<h3><span class="header-section-number">4.1.1</span> 远程备份<a href="备份实战.html#远程备份" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>我选择了使用朱方捷老师在大数据中心服务器作为我的远程备份位点</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="备份实战.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">##登录朱老师在大数据中的远程terminal</span></span>
+<span id="cb2-2"><a href="备份实战.html#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> zhufj@210.34.84.97</span>
+<span id="cb2-3"><a href="备份实战.html#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">##创建你需要挂载的文件夹</span></span>
+<span id="cb2-4"><a href="备份实战.html#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> data_backup</span>
+<span id="cb2-5"><a href="备份实战.html#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">##退出登录</span></span>
+<span id="cb2-6"><a href="备份实战.html#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="bu">exit</span></span>
+<span id="cb2-7"><a href="备份实战.html#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">## 登陆到你的本地服务器</span></span>
+<span id="cb2-8"><a href="备份实战.html#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> yuanzhen@59.79.233.205</span>
+<span id="cb2-9"><a href="备份实战.html#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">##在/wrk下创建你需要对接的文件夹</span></span>
+<span id="cb2-10"><a href="备份实战.html#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> mkdir /wrk/data_backup</span>
+<span id="cb2-11"><a href="备份实战.html#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">##现在我们可以使用sshfs命令在本地挂载文件系统。如果您的VPS是使用密码登录创建的，则以下命令将执行此操作。在此步骤中，系统将要求您提供虚拟服务器的root密码。</span></span>
+<span id="cb2-12"><a href="备份实战.html#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> sshfs <span class="at">-o</span> allow_other zhufj@210.34.84.97:/share/home/zhufj/data_backup /wrk/data_backup</span>
+<span id="cb2-13"><a href="备份实战.html#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co">###当您不再需要安装点时，您只需使用该命令卸载它即可</span></span>
+<span id="cb2-14"><a href="备份实战.html#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> umount /mnt/droplet</span>
+<span id="cb2-15"><a href="备份实战.html#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="备份实战.html#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="备份实战.html#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="备份实战.html#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co">####永久挂载远程文件系统</span></span>
+<span id="cb2-19"><a href="备份实战.html#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="co">###SSHFS还允许为远程文件系统设置永久挂载点。这将设置一个挂载点，就算你重新启动本地计算机和服务器它也持续存在。为了设置永久挂载点，我们需要编辑本地计算机上`/etc/fstab`文件，以便在每次启动系统时自动挂载文件系统。</span></span>
+<span id="cb2-20"><a href="备份实战.html#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="co">###首先，我们需要用文本编辑器编辑`/etc/fstab`文件。</span></span>
+<span id="cb2-21"><a href="备份实战.html#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> vim /etc/fstab</span>
+<span id="cb2-22"><a href="备份实战.html#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="co">###添加以下条目</span></span>
+<span id="cb2-23"><a href="备份实战.html#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="ex">sshfs#zhufj@210.34.84.97:/share/home/zhufj/data_backup</span> /wrk/data_backup</span>
+<span id="cb2-24"><a href="备份实战.html#cb2-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-25"><a href="备份实战.html#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="co">##应该注意的是，在本地永久安装VPS文件系统存在潜在的安全风险。如果您的本地计算机受到攻击，它可能会直接感染到您的服务器。因此，建议不要在生产服务器上设置永久挂载。</span></span>
+<span id="cb2-26"><a href="备份实战.html#cb2-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-27"><a href="备份实战.html#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="co">#然后修改/etc/crontab</span></span>
+<span id="cb2-28"><a href="备份实战.html#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> vim /etc/crontab</span>
+<span id="cb2-29"><a href="备份实战.html#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="co">##在里面添加（这样你就会在每周日的23：59准时将你的系统备份并生成日志文件）</span></span>
+<span id="cb2-30"><a href="备份实战.html#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="ex">59</span> 23   <span class="pp">*</span> <span class="pp">*</span> sun root    cd /wrk <span class="kw">&amp;&amp;</span> <span class="ex">/wrk/data_backup.sh</span> <span class="at">--report</span> /wrk/data_backup.log</span></code></pre></div>
+</div>
+</div>
+<div id="timeshift备份与还原" class="section level2 hasAnchor" number="4.2">
+<h2><span class="header-section-number">4.2</span> Timeshift备份与还原<a href="备份实战.html#timeshift备份与还原" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="系统备份" class="section level3 hasAnchor" number="4.2.1">
+<h3><span class="header-section-number">4.2.1</span> 系统备份<a href="备份实战.html#系统备份" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>一般linux系统是比较稳定的，但是像我这样马马虎虎，又是一个Linux半吊子新手很容易出错，那么备份就显得十分重要，这里介绍备份的一种方法</p>
+<p>此时你需要准备</p>
+<ul>
+<li><p>下载timeshift</p>
+<p><code>sudo apt-get update</code></p>
+<p><code>sudo apt-get install timeshif</code></p></li>
+<li><p>准备一个外接的磁盘（容量在32G以上），那一块磁盘通过外接式USB接口，搭配USB3.0来传输。</p></li>
+</ul>
+<p>此时在你的Ubuntu本地软件库你就会找到Timshift这个软件图标，具体的<a href="https://www.linuxtechi.com/timeshift-backup-restore-ubuntu-linux/">可视化界面操作</a></p>
+</div>
+<div id="系统还原" class="section level3 hasAnchor" number="4.2.2">
+<h3><span class="header-section-number">4.2.2</span> 系统还原<a href="备份实战.html#系统还原" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>如果你的系统奔溃，但是有三种以下的情况，你可以分别应对</p>
+<ul>
+<li><p>如果能进入登陆界面，并且能够打开Timeshift，你就直接点击还原（restore），重启电脑就可。</p></li>
+<li><p>如果只能进入登陆界面，一般系统崩溃后不能进入桌面，但是能够进入登录界面，现象就是在登录界面输入密码后不会进入桌面，那么就要通过命令行的方式进行还原。</p>
+<ul>
+<li><p>通过·Ctrl+Alt+F1（一般F1-F6都可）进入tty终端</p></li>
+<li><p>输入用户和密码登录</p></li>
+<li><p>执行下面命令获取系统当前可以还原的节点</p>
+<p><code>sudo timeshift --list</code></p></li>
+<li><p>根据输出的内容选择一个节点进行还原(–skip-grub 选项为跳过grub安装，一般来说grub不需要重新安装，除非bios启动无法找到正确的grub启动项，才需要安装)</p>
+<p><code>sudo timeshift --restore --snapshot '2021-06-10_15-18-14' --skip-grub</code></p></li>
+<li><p>在输出的内容中一次输入【Enter】键和【y】键即可</p>
+<p>你不想输入这些的话直接使用</p>
+<p><code>sudo timeshift --restore --snapshot '2021-06-10_15-18-14' --skip-grub --scripted</code></p></li>
+</ul></li>
+<li><p>如果无法进入系统，通过U盘启动系统</p>
+<p>当登录界面和桌面环境都无法进入时，一般系统已经彻底崩溃，此时只能通过Linux live CD进行还原。</p>
+<ul>
+<li>制作Linux Mint启动盘</li>
+<li>进入Live系统后打开Timeshift软件，点击设置按钮，设置快照的储存位置</li>
+<li>后续步骤和第一和第二种情况相同按照线条的处理方式</li>
+</ul></li>
+</ul>
+</div>
+<div id="tips" class="section level3 hasAnchor" number="4.2.3">
+<h3><span class="header-section-number">4.2.3</span> tips<a href="备份实战.html#tips" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="制作linux-mint启动盘以下操作未经过实际操作慎行" class="section level4 hasAnchor" number="4.2.3.1">
+<h4><span class="header-section-number">4.2.3.1</span> 制作Linux Mint启动盘==（以下操作未经过实际操作，慎行）==<a href="备份实战.html#制作linux-mint启动盘以下操作未经过实际操作慎行" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li><p>下载<a href="https://www.linuxmint.com/edition.php?id=246">iso文件</a></p></li>
+<li><p>下载<a href="https://www.ultraiso.com/">UltraISO</a> ,傻瓜式安装，不用注册打开之后就进入主界面</p></li>
+<li><p>选择菜单栏中的【文件】，然后选择打开，这个步骤就是寻找你的镜像文件</p></li>
+<li><p>选择镜像文件，选择【打开】，我们就可以在主界面看到我们打开的镜像文件</p></li>
+<li><p>打开之后，选择菜单栏中的【启动】，【写入硬盘映像】</p></li>
+<li><p>在弹出的对话框中，选择【硬盘驱动器】，就是我们自己的U盘，我们插入u盘，就会自动显示。</p>
+<p>说明：制作U盘启动盘会导致U盘格式化，所以提前备份好U盘里面的东西，然后选择【写入】，就可以看到读条了！</p></li>
+<li><p>等进度条满格之后，就制作成功了！打开【计算机】，可以看到U盘也变了！</p></li>
+</ul>
+<p>以上来源非官方的<a href="https://jingyan.baidu.com/article/4b07be3c497b4648b280f36f.html">百度百科</a> 可以详细看看<a href="https://ubuntu.com/tutorials/create-a-usb-stick-on-ubuntu#2-requirements">官方文档</a></p>
+</div>
+<div id="live-usb" class="section level4 hasAnchor" number="4.2.3.2">
+<h4><span class="header-section-number">4.2.3.2</span> Live USB<a href="备份实战.html#live-usb" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p><strong>Live USB</strong> 是<a href="https://zh.wikipedia.org/wiki/USB">USB</a><a href="https://zh.wikipedia.org/wiki/隨身碟">随身碟</a>或USB<a href="https://zh.wikipedia.org/wiki/硬碟">硬盘</a>，里面含有完整的<a href="https://zh.wikipedia.org/wiki/作業系統">操作系统</a>，可以被用来开机（booting）。Live USB很像<a href="https://zh.wikipedia.org/wiki/Live_CD">live CD</a>，但基本上有能力更改设定，而且可以把软件安装回USB装置上。像live CD一样，live USB可以使用在<a href="https://zh.wikipedia.org/wiki/嵌入式系统">嵌入式系统</a>系统管理（embedded systems system administration），资料还原（data recovery），或是不需要把操作系统安装到主机硬盘（local hard disk drive）里的测试。许多操作系统，包含微软的<a href="https://zh.wikipedia.org/wiki/Windows_XP_Embedded">Windows XP Embedded</a>和许多<a href="https://zh.wikipedia.org/wiki/Linux套件">Linux套件</a>和<a href="https://zh.wikipedia.org/wiki/BSD">BSD</a>可以被安装在随身碟上使用。差不多在你U盘上搞一个自己的小Linux系统</p>
+
+</div>
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="还原.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/04-application.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
